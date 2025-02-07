@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include 'boilerplate.html' %}
+        <style>
+            table, th, td {
+                border: 1px solid #000;
+            }
+        </style>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>MIME</th>
+                <th>Uploader</th>
+                <th>Hochgeladen</th>
+                <th></th>
+                <th>Aktionen</th>
+            </tr>
+            {% for sound in sounds %}
+            <tr>
+                <td>{{ sound.id }}</td>
+                <td>{{ sound.name }}</td>
+                <td>{{ sound.mime }}</td>
+                <td>{{ sound.uploader }}</td>
+                <td>{{ sound.uploaded.strftime("%d.%m.%Y %H:%M") }}</td>
+                <td>
+                    <audio controls>
+                        <source src="/serve-sound/{{ sound.id }}" type="{{ sound.mime }}">
+                    </audio>
+                </td>
+                <td><a href="/serve-sound/{{ sound.id }}">Dateilink</a> &bull; <a href="/download/{{ sound.id }}">Nunderlade</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
+
