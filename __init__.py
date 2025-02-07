@@ -1,5 +1,5 @@
 from os import abort
-from flask import Flask, render_template, request, send_file, abort, redirect
+from flask import Flask, make_response, render_template, request, send_file, abort, redirect
 from flask_httpauth import HTTPBasicAuth
 import datetime as dt
 from psql import SQLObject
@@ -84,7 +84,11 @@ def serve_sound(sid, req_type):
     if not sound:
         return abort(404)
 
-    return send_file(sound.get_file(), sound.mime, download_name=sound.name + "." + sound.extension, as_attachment=as_attachment)
+    filename = sound.name + "." + sound.extension
+
+    response = send_file(sound.get_file(), sound.mime, download_name=filename, as_attachment=as_attachment)
+    response.headers["X-Filename"] = filename
+    return response
 
 
 @app.route("/get/<name>")
